@@ -1,0 +1,20 @@
+{
+  "name": "bluebirdmobile",
+  "description": "",
+  "main": "",
+  "authors": [
+    "yaoandw <yaoandw@163.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
