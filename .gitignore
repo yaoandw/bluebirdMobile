@@ -56,6 +56,7 @@ DerivedData
 *.dSYM.zip
 *.mobileprovision
 node_modules
+.idea
 
 # CocoaPods
 
