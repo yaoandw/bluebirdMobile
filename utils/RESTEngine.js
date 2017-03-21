@@ -56,10 +56,15 @@ var RESTEngine =  {
             winston.info('error: '+error);
             winston.info('response: '+response);
             body = JSON.parse(body);
+            body.bbErrorCode = BBConstant.error_status_ok;
             var result = body['result'];
             if(!(typeof result === "undefined") && !result){
-                error = new Error(generateErrorWithResponseObject(body));
-                error.status = BBConstant.error_status_biz;
+                body.bbErrorMsg = generateErrorWithResponseObject(body);
+                body.bbErrorCode = BBConstant.error_status_biz;
+            }
+            if (response.statusCode == 401){
+                body.bbErrorMsg = '未登录';
+                body.bbErrorCode = BBConstant.error_status_login;
             }
             callback(error,response,body);
         })
