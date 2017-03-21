@@ -40,6 +40,7 @@ var RESTEngine =  {
         this.bbrequest('GET',query,token,params,callback);
     },
     bbrequest : function (method,query,token,params,callback) {
+        winston.info('token: '+token);
         var options = {
             method: method,
             url: BBConstant.base_url + '/' + query,
@@ -55,7 +56,17 @@ var RESTEngine =  {
             winston.info('body: '+body);
             winston.info('error: '+error);
             winston.info('response: '+response);
-            body = JSON.parse(body);
+            try {
+                body = JSON.parse(body);
+            } catch (e) {
+                console.error(e);
+                body = {};
+                body.bbErrorMsg = '内部错误';
+                body.bbErrorCode = BBConstant.error_status_internal;
+                callback(error,response,body);
+                return;
+            }
+
             body.bbErrorCode = BBConstant.error_status_ok;
             var result = body['result'];
             if(!(typeof result === "undefined") && !result){

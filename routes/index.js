@@ -19,7 +19,9 @@ router.get('/', function(req, res, next) {
 
 router.get('/:query', function(req, res, next) {
     var query = req.params.query;
-    engine.bbget(query,null,null,function (error, response, body) {
+    console.info(req.headers);
+    // console.info(req.header('authorization'));
+    engine.bbget(query,req.header('authorization'),null,function (error, response, body) {
         if (!error && response.statusCode == 200) {
             winston.info(body);
         }
@@ -30,7 +32,7 @@ router.get('/:query', function(req, res, next) {
 router.get('/:query1/:query2', function(req, res, next) {
     var query1 = req.params.query1;
     var query2 = req.params.query2;
-    engine.bbget(query1+'/'+query2,req.cookies.token,null,function (error, response, body) {
+    engine.bbget(query1+'/'+query2,req.header('authorization'),null,function (error, response, body) {
         if (!error) {
             winston.info(body);
             res.send(body);
@@ -43,7 +45,7 @@ router.get('/:query1/:query2', function(req, res, next) {
 
 router.post('/:query1', function(req, res, next) {
     var query1 = req.params.query1;
-    engine.bbpost(query1,req.cookies.token,req.body,function (error, response, body) {
+    engine.bbpost(query1,req.header('authorization'),req.body,function (error, response, body) {
         if (!error) {
             winston.info(body);
             res.send(body);
@@ -54,14 +56,15 @@ router.post('/:query1', function(req, res, next) {
     })
 });
 
-router.get('/login',function (req,res,next) {
-    res.render('login');
-});
+// router.get('/login',function (req,res,next) {
+//     res.render('login');
+// });
 router.post('/login/auth',function (req, res, next) {
-    engine.bbpost('login',req.cookies.token,{'mobile':req.body.mobile,'password':req.body.password},function (error,response,body) {
+    engine.bbpost('login',req.header('authorization'),{'mobile':req.body.mobile,'password':req.body.password},function (error,response,body) {
         if (!error) {
             winston.info(body);
-            res.cookie('token',body['accessToken']);
+            winston.info(body['accessToken']);
+            // res.cookie('accessToken',body['accessToken'], {maxAge: 365 * 24 * 60 * 60 * 1000});
             res.send(body);
         }else {
             winston.info(error);
@@ -71,15 +74,25 @@ router.post('/login/auth',function (req, res, next) {
     })
 });
 
-router.get('/orders',function (req, res, next) {
-    engine.bbget('orders',req.cookies.token,{'pageSize':req.body.pageSize,'page':req.body.page},function (error,response,body) {
-        if (!error && response.statusCode == 200){
-            res.render('consumer/orderList',{'items':body['items']});
-        }else {
-            res.render('error',{'message':error.message,'error':error});
-        }
 
-    })
+
+//------------------------test-------------------
+router.get('/test/test/getCookieTest', function (req, res,next) {
+    // 如果请求中的 cookie 存在 isVisit, 则输出 cookie
+    // 否则，设置 cookie 字段 isVisit, 并设置过期时间为1分钟
+    if (req.cookies.isVisit) {
+        console.log(req.cookies);
+        res.send("再次欢迎访问");
+    } else {
+        // res.cookie('isVisit', 1, {maxAge: 60 * 1000});
+        res.send("please visit setCookieTest first");
+    }
+});
+router.get('/test/test/setCookieTest', function (req, res,next) {
+    // 如果请求中的 cookie 存在 isVisit, 则输出 cookie
+    // 否则，设置 cookie 字段 isVisit, 并设置过期时间为1分钟
+    res.cookie('isVisit', 1, {maxAge: 60 * 1000});
+    res.send("欢迎第一次访问");
 });
 
 module.exports = router;
