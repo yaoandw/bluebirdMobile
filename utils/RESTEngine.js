@@ -2,7 +2,7 @@
  * Created by yaoandw on 2016/12/27.
  */
 var request = require('request');
-var winston = require('winston');
+var winston = require('./BBLogger.js');
 var BBConstant = require('./BBConstant.js');
 
 function generateErrorWithResponseObject(body) {
