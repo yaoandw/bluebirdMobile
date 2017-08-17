@@ -2,7 +2,7 @@
  * Created by chenlinling on 8/17/17.
  */
 window.onload = function () {
-  setTimeout(doOnLoad,100);
+  setTimeout(doOnLoad,500);
 };
 
 function doOnLoad() {
