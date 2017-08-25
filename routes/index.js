@@ -19,6 +19,14 @@ router.get('/', function(req, res, next) {
 
 router.get('/:query', function(req, res, next) {
     var query = req.params.query;
+    if (query === 'favicon.ico'){
+        return;
+    }
+    //vue使用history模式需要后台支持,将请求都跳转到index.html(hash模式,跳转是在前端完成,history模式会请求后端)
+    if (query === 'guide') {
+        res.render('vue', { });
+        return;
+    }
     console.info(req.headers);
     // console.info(req.header('authorization'));
     engine.bbget(query,req.header('authorization'),null,function (error, response, body) {
@@ -32,6 +40,13 @@ router.get('/:query', function(req, res, next) {
 router.get('/:query1/:query2', function(req, res, next) {
     var query1 = req.params.query1;
     var query2 = req.params.query2;
+    if (query2 === 'favicon.png'){
+        return;
+    }
+    if (query1 === 'guide') {
+        res.render('vue', { });
+        return;
+    }
     engine.bbget(query1+'/'+query2,req.header('authorization'),null,function (error, response, body) {
         if (!error) {
             winston.info(body);
