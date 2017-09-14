@@ -23,7 +23,7 @@ router.get('/:query', function(req, res, next) {
         return;
     }
     //vue使用history模式需要后台支持,将请求都跳转到index.html(hash模式,跳转是在前端完成,history模式会请求后端)
-    if (query === 'guide') {
+    if (query === 'guide' || query === 'products' || query === 'mobile') {
         res.render('vue', { });
         return;
     }
@@ -43,7 +43,7 @@ router.get('/:query1/:query2', function(req, res, next) {
     if (query2 === 'favicon.png'){
         return;
     }
-    if (query1 === 'guide') {
+    if (query1 === 'guide' || query === 'products' || query === 'mobile') {
         res.render('vue', { });
         return;
     }
